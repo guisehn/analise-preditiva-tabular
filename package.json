@@ -1,0 +1,10 @@
+{
+  "name": "analise-preditiva-tabular",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.3",
+    "lodash": "^4.12.0"
+  }
+}
