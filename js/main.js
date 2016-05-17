@@ -1,5 +1,15 @@
 'use strict'
 
-var $ = require('jquery')
+var GrammarVerifier = require('./grammar-verifier')
+var FirstFollowGenerator = require('./first-follow-generator')
 
-$('h1').text('olar')
+var g = {
+  S: ["ABCDE"],
+  A: ["a", ""],
+  B: ["b", ""],
+  C: ["c"],
+  D: ["d", ""],
+  E: ["e", ""]
+}
+
+console.log(FirstFollowGenerator.getFirsts(g))
