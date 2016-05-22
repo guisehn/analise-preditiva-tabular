@@ -27,7 +27,13 @@ function getFirstSet(grammar, symbol, history) {
       }
 
       var first = getFirstSet(grammar, s, history)
-      firsts.push(_.filter(first, s => s !== ''))
+
+      // filtra sentença vazia se não estamos na última posição
+      if (i + 1 < e.length) {
+        firsts.push(_.filter(first, s => s !== ''))
+      } else {
+        firsts.push(first)
+      }
 
       // testa próximo símbolo apenas se conjunto first
       // possui sentença vazia
