@@ -15,7 +15,9 @@ $('#use-example').click(e => {
 
 $('#grammar-form').submit(e => {
   var grammar, error
-  var grammarInput = $('#grammar-input').val()
+  var grammarInput = $('#grammar-input').val().replace(/ε/g, '')
+
+  $('#grammar-input').val(grammarInput)
 
   reset()
 
