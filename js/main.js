@@ -109,6 +109,7 @@ function showFirstSetTable(grammar) {
 
 function showFollowSetTable(grammar) {
   var followSet = FollowSetFinder.getFollowSets(grammar)
+
   followSet = Utils.emptyToEpsilon(followSet)
 
   var table = mountTable(followSet, 'Símbolo', 'Follow')
@@ -120,10 +121,15 @@ function process(grammar) {
     return
   }
 
-  showGrammarRepresentation(grammar)
-  showFirstSetTable(grammar)
-  showFollowSetTable(grammar)
-  showObject(grammar)
+  try {
+    showGrammarRepresentation(grammar)
+    showFirstSetTable(grammar)
+    showFollowSetTable(grammar)
+    showObject(grammar)
 
-  $('#result').hide().fadeIn('fast')
+    $('#result').hide().fadeIn('fast')
+  } catch (e) {
+    console.log(e)
+    alert('Ocorreu um erro. Veja o console para mais detalhes.')
+  }
 }

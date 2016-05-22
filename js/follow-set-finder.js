@@ -18,25 +18,43 @@ function getFollowSet(grammar, symbol, history) {
 
   _.forEach(grammar.productionSet, (rightSide, leftSide) => {
     _.forEach(rightSide, production => {
-      var index = production.indexOf(symbol)
+      var symbolIndex = production.indexOf(symbol)
 
-      if (index === -1) {
+      if (symbolIndex === -1) {
         return
       }
 
-      var next = production[index + 1]
+      for (var i = symbolIndex; i < production.length; i++) {
+        var next = production[i + 1]
 
-      // se é final da produção, pega follow do lado esquerdo
-      if (next === undefined) {
-        //followSet = followSet.concat(getFollowSet())
-      } else {
-        var firsts = FirstSetFinder.getFirstSet(grammar, next)
-        followSet = followSet.concat(firsts)
+        // impede recursão infinita
+        if (_.includes(history, next)) {
+          break
+        }
+
+        // se é final da produção, inclui follow do lado esquerdo
+        if (next === undefined) {
+          if (leftSide !== symbol) {
+            followSet = followSet.concat(getFollowSet(grammar, leftSide, history))
+          }
+
+          break
+        }
+
+        // adiciona first do próximo símbolo ao follow set
+        var first = FirstSetFinder.getFirstSet(grammar, next)
+        followSet = followSet.concat(first.filter(s => s !== ''))
+
+        // testa próximo símbolo apenas se conjunto first
+        // possui sentença vazia
+        if (!_.includes(first, '')) {
+          break
+        }
       }
     })
   })
 
-  return followSet
+  return _.uniq(followSet)
 }
 
 function getFollowSets(grammar) {
