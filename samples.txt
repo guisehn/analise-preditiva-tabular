@@ -1,0 +1,14 @@
+S:ABCDE
+A:a|
+B:b|
+C:c
+D:d|
+E:e|
+
+---
+
+E:TZ
+Z:+TZ|
+T:FY
+Y:*FY|
+F:i|(E)
