@@ -25,7 +25,7 @@ function getRepresentation(grammar) {
   var nonTerminals = getNonTerminals(grammar).join(', ')
   var terminals = getTerminals(grammar).join(', ')
   var productions = _.map(Utils.emptyToEpsilon(grammar), (r, l) =>
-    '  ' + l + ' -> ' + r.join(', ')).join('\n')
+    '  ' + l + ' -> ' + r.join(' | ')).join('\n')
 
   var str = 'G = ({' + nonTerminals + '}, {' + terminals + '}, P, ' + initialSymbol + ')'
   str += '\nP = {\n' + productions + '\n}'
