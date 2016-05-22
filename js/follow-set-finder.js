@@ -27,14 +27,10 @@ function getFollowSet(grammar, symbol, history) {
       for (var i = symbolIndex; i < production.length; i++) {
         var next = production[i + 1]
 
-        // impede recursão infinita
-        if (_.includes(history, next)) {
-          break
-        }
-
         // se é final da produção, inclui follow do lado esquerdo
         if (next === undefined) {
-          if (leftSide !== symbol) {
+          // checagem para evitar recursão infinita
+          if (!_.includes(history, leftSide)) {
             followSet = followSet.concat(getFollowSet(grammar, leftSide, history))
           }
 
