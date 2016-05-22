@@ -1,0 +1,11 @@
+textarea {
+  resize: vertical;
+}
+
+#instructions {
+  text-align: justify;
+}
+
+#result {
+  margin-top: 20px;
+}

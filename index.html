@@ -3,10 +3,92 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="s.css">
 </head>
 <body>
   <div class="container">
-    <h1></h1>
+    <h1>Análise preditiva tabular</h1>
+    <p>Eduardo Cortes, Guilherme Sehn, Gustavo Marchesan</p>
+    <hr>
+
+    <div class="row">
+      <div class="col-sm-5">
+        <form id="grammar-form">
+          <div id="error-message" class="alert alert-danger" role="alert" style="display:none"></div>
+
+          <div class="form-group">
+            <label for="grammar-input">Regras de produção da gramática:</label>
+            <textarea id="grammar-input" class="form-control" rows="8"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Analisar</button>
+        </form>
+      </div>
+
+      <div id="instructions" class="col-sm-7">
+        <h5>Instruções</h5>
+
+        <p>Ao digitar as regras de produção da gramática, separe o lado esquerdo do direito com o caractere <code>:</code>. Use <code>|</code> para separar as produções. Para representar uma produção vazia, não digite nenhum caractere na produção. Exemplo:</p>
+
+        <div class="row">
+          <div class="col-md-4">
+<pre id="example">
+A:Bb|c|d
+B:f|
+</pre>
+          </div>
+        </div>
+
+        <p>Nesse exemplo, as produções de <b>A</b> são <b>Bb</b>, <b>c</b> e <b>d</b>; e as produções de <b>B</b> são <b>f</b> e <b>ε</b> (sentença vazia). <a href="#" id="use-example">Testar com este exemplo &raquo;</a></p>
+
+        <p>Símbolos não-terminais são representados por qualquer caractere maiúsculo sem acento (<code>A-Z</code>), símbolos terminais são representados por qualquer outro caractere. Por simplificação, cada símbolo deve ser representado por um caractere apenas.</p>
+      </div>
+    </div>
+
+    <div id="result" style="display:none">
+      <hr>
+      <h2>Resultado</h2>
+
+      <!--
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Objeto</h4>
+          <div id="object"></div>
+        </div>
+      </div>
+      -->
+
+      <div class="row">
+        <div class="col-md-4">
+          <h4>Representação da gramática</h4>
+          <pre id="representation"></pre>
+        </div>
+
+        <div class="col-md-4">
+          <h4>Tabela first</h4>
+          <div id="firsts-table"></div>
+        </div>
+
+        <div class="col-md-4">
+          <h4>Tabela follow</h4>
+          <div id="follows-table">TO-DO</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Tabela de análise preditiva</h4>
+          <div id="parsing-table">TO-DO</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Testar entrada</h4>
+          <div id="parsing-table">TO-DO</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="bundle.js"></script>

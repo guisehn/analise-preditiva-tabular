@@ -1,15 +1,8 @@
+var Utils = require('./utils')
 var _ = require('lodash')
 
-function isNonTerminal(symbol) {
-  return /^[A-Z]$/.test(symbol)
-}
-
-function isTerminal(symbol) {
-  return !isNonTerminal(symbol);
-}
-
 function getFirst(grammar, symbol, history) {
-  if (isTerminal(symbol)) {
+  if (Utils.isTerminal(symbol)) {
     return [symbol]
   }
 
@@ -44,7 +37,7 @@ function getFirst(grammar, symbol, history) {
     return _.flatten(firsts)
   })
 
-  return _.uniq(_.flatten(firsts))
+  return _(firsts).flatten().uniq().value()
 }
 
 function getFirsts(grammar) {
