@@ -8,7 +8,7 @@ function getFirstSet(grammar, symbol, history) {
     return [symbol]
   }
 
-  history = history ? history.concat(symbol) : []
+  history = history ? history.concat(symbol) : [symbol]
 
   var firsts = (grammar.productionSet[symbol] || []).map(e => {
     var firsts = []
