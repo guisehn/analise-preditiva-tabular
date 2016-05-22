@@ -1,4 +1,7 @@
+'use strict'
+
 var Utils = require('./utils')
+var Grammar = require('./grammar')
 var _ = require('lodash')
 
 function extractPairs(str) {
@@ -70,7 +73,10 @@ function parse(str) {
   validateDuplicatesOnLeft(pairs)
   validateMissingNonTerminals(pairs)
 
-  return pairsToObject(pairs)
+  var firstSymbol = pairs[0][0]
+  var productions = pairsToObject(pairs)
+
+  return new Grammar(firstSymbol, productions)
 }
 
 module.exports = {

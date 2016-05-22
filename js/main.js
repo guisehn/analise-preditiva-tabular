@@ -3,8 +3,8 @@
 var Utils = require('./utils')
 var GrammarVerifier = require('./grammar-verifier')
 var GrammarParser = require('./grammar-parser')
-var FirstFollowGenerator = require('./first-follow-generator')
-
+var FirstSetFinder = require('./first-set-finder')
+var FollowSetFinder = require('./follow-set-finder')
 var $ = require('jquery')
 
 $('#use-example').click(e => {
@@ -92,17 +92,27 @@ function mountTable(object, leftTitle, rightTitle) {
 }
 
 function showGrammarRepresentation(grammar) {
-  $('#representation').text(grammar)
+  $('#representation').text(grammar.getRepresentation())
 }
 
 function showObject(grammar) {
   $('#object').html($('<pre></pre>').text(JSON.stringify(grammar, null, 2)))
 }
 
-function showFirstTable(firsts) {
-  firsts = Utils.emptyToEpsilon(firsts)
-  var table = mountTable(firsts, 'Símbolo', 'First')
-  $('#firsts-table').html(table)
+function showFirstSetTable(grammar) {
+  var firstSet = FirstSetFinder.getFirstSets(grammar)
+  firstSet = Utils.emptyToEpsilon(firstSet)
+
+  var table = mountTable(firstSet, 'Símbolo', 'First')
+  $('#first-set-table').html(table)
+}
+
+function showFollowSetTable(grammar) {
+  var followSet = FollowSetFinder.getFollowSets(grammar)
+  followSet = Utils.emptyToEpsilon(followSet)
+
+  var table = mountTable(followSet, 'Símbolo', 'Follow')
+  $('#follow-set-table').html(table)
 }
 
 function process(grammar) {
@@ -110,11 +120,9 @@ function process(grammar) {
     return
   }
 
-  var firsts = FirstFollowGenerator.getFirsts(grammar)
-  var repesentation = GrammarVerifier.getRepresentation(grammar)
-
-  showGrammarRepresentation(repesentation)
-  showFirstTable(firsts)
+  showGrammarRepresentation(grammar)
+  showFirstSetTable(grammar)
+  showFollowSetTable(grammar)
   showObject(grammar)
 
   $('#result').hide().fadeIn('fast')

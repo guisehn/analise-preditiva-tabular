@@ -1,3 +1,5 @@
+'use strict'
+
 function isNonTerminal(symbol) {
   return /^[A-Z]$/.test(symbol)
 }
