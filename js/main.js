@@ -5,7 +5,7 @@ var GrammarVerifier = require('./grammar-verifier')
 var GrammarParser = require('./grammar-parser')
 var FirstSetFinder = require('./first-set-finder')
 var FollowSetFinder = require('./follow-set-finder')
-var PredictiveSetFinder = require('./predictive-set-finder')
+var ParsingTableFinder = require('./parsing-table-finder')
 var $ = require('jquery')
 
 $('#use-example').click(e => {
@@ -66,31 +66,20 @@ function validate(grammar) {
 }
 
 function mountTable(object, leftTitle, rightTitle) {
-  var aux = '<th></th>'
-  if(rightTitle instanceof Array){
-    for (var i = 0; i < rightTitle.length-1; i++) {
-      aux += '<th></th>'
-    }
-  }
   var table = $('<table class="table table-bordered"></table>')
     .html('\
       <thead>\
         <tr>\
-          <th width="10%"></th>'+
-          aux+
-        '</tr>\
+          <th width="10%"></th>\
+          <th></th>\
+        </tr>\
       </thead>\
       <tbody class="monospace"></tbody>\
     ')
 
   table.find('th:eq(0)').text(leftTitle)
-  if(rightTitle instanceof Array){
-    for (var i = 1; i <= rightTitle.length; i++) {
-      table.find('th:eq('+i+')').text(rightTitle[i-1])
-    }
-  }else{
-    table.find('th:eq(1)').text(rightTitle)
-  }
+  table.find('th:eq(1)').text(rightTitle)
+
   _.forEach(object, (right, left) => {
     var tr = $('<tr></tr>')
 
@@ -101,6 +90,34 @@ function mountTable(object, leftTitle, rightTitle) {
   })
 
   return table
+}
+
+function showParsingTable(grammar) {
+  var parsingTable = ParsingTableFinder.getParsingTable(grammar)
+
+  var table = $('<table class="table table-bordered monospace"></table>')
+    .html('\
+      <thead><tr><th></th></tr></thead>\
+      <tbody></tbody>\
+    ')
+
+  var terminals = _.keys(parsingTable[grammar.getNonTerminals()[0]])
+
+  _.forEach(terminals, terminal => {
+    $('<th></th>').text(terminal).appendTo(table.find('thead tr'))
+  })
+
+  _.forEach(parsingTable, (items, leftSide) => {
+    var tr = $('<tr></tr>').appendTo(table.find('tbody'))
+
+    $('<td></td>').text(leftSide).appendTo(tr)
+
+    _.forEach(terminals, terminal => {
+      $('<td></td>').text(items[terminal].join(', ')).appendTo(tr)
+    })
+  })
+
+  $('#parsing-table').html(table)
 }
 
 function showGrammarRepresentation(grammar) {
@@ -128,15 +145,6 @@ function showFollowSetTable(grammar) {
   $('#follow-set-table').html(table)
 }
 
-function showPredictiveSetTable(grammar){
-  var predictiveSet = PredictiveSetFinder.getPredictiveSets(grammar)
-
-  predictiveSet = Utils.emptyToEpsilon(predictiveSet)
-
-  var table = mountTable(predictiveSet, '', grammar.getTerminals())
-  $('#predictive-set-table').html(table)
-}
-
 function process(grammar) {
   if (!validate(grammar)) {
     return
@@ -146,7 +154,7 @@ function process(grammar) {
     showGrammarRepresentation(grammar)
     showFirstSetTable(grammar)
     showFollowSetTable(grammar)
-    showPredictiveSetTable(grammar)
+    showParsingTable(grammar)
     showObject(grammar)
 
     $('#result').hide().fadeIn('fast')
