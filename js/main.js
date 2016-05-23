@@ -73,7 +73,7 @@ function mountTable(object, leftTitle, rightTitle) {
           <th></th>\
         </tr>\
       </thead>\
-      <tbody></tbody>\
+      <tbody class="monospace"></tbody>\
     ')
 
   table.find('th:eq(0)').text(leftTitle)
