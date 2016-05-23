@@ -5,6 +5,7 @@ var GrammarVerifier = require('./grammar-verifier')
 var GrammarParser = require('./grammar-parser')
 var FirstSetFinder = require('./first-set-finder')
 var FollowSetFinder = require('./follow-set-finder')
+var PredictiveSetFinder = require('./predictive-set-finder')
 var $ = require('jquery')
 
 $('#use-example').click(e => {
@@ -65,20 +66,31 @@ function validate(grammar) {
 }
 
 function mountTable(object, leftTitle, rightTitle) {
+  var aux = '<th></th>'
+  if(rightTitle instanceof Array){
+    for (var i = 0; i < rightTitle.length-1; i++) {
+      aux += '<th></th>'
+    }
+  }
   var table = $('<table class="table table-bordered"></table>')
     .html('\
       <thead>\
         <tr>\
-          <th width="10%"></th>\
-          <th></th>\
-        </tr>\
+          <th width="10%"></th>'+
+          aux+
+        '</tr>\
       </thead>\
       <tbody class="monospace"></tbody>\
     ')
 
   table.find('th:eq(0)').text(leftTitle)
-  table.find('th:eq(1)').text(rightTitle)
-
+  if(rightTitle instanceof Array){
+    for (var i = 1; i <= rightTitle.length; i++) {
+      table.find('th:eq('+i+')').text(rightTitle[i-1])
+    }
+  }else{
+    table.find('th:eq(1)').text(rightTitle)
+  }
   _.forEach(object, (right, left) => {
     var tr = $('<tr></tr>')
 
@@ -116,6 +128,15 @@ function showFollowSetTable(grammar) {
   $('#follow-set-table').html(table)
 }
 
+function showPredictiveSetTable(grammar){
+  var predictiveSet = PredictiveSetFinder.getPredictiveSets(grammar)
+
+  predictiveSet = Utils.emptyToEpsilon(predictiveSet)
+
+  var table = mountTable(predictiveSet, '', grammar.getTerminals())
+  $('#predictive-set-table').html(table)
+}
+
 function process(grammar) {
   if (!validate(grammar)) {
     return
@@ -125,6 +146,7 @@ function process(grammar) {
     showGrammarRepresentation(grammar)
     showFirstSetTable(grammar)
     showFollowSetTable(grammar)
+    showPredictiveSetTable(grammar)
     showObject(grammar)
 
     $('#result').hide().fadeIn('fast')
