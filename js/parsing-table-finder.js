@@ -10,7 +10,8 @@ function getParsingRow(grammar, firstSets, followSets, symbol) {
   var row = {}
 
   terminals.forEach(t => {
-    row[t] = ['TO-DO'] // to-do
+    var first = _.find(firstSets[symbol], { symbol: t });
+    row[t] = _.get(first, 'productions', [])
   })
 
   return row

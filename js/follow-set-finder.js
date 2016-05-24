@@ -38,7 +38,7 @@ function getFollowSet(grammar, symbol, history) {
         }
 
         // adiciona first do próximo símbolo ao follow set
-        var first = FirstSetFinder.getFirstSet(grammar, next)
+        var first = _.map(FirstSetFinder.getFirstSet(grammar, next), 'symbol')
         followSet = followSet.concat(first.filter(s => s !== ''))
 
         // testa próximo símbolo apenas se conjunto first

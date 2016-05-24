@@ -3,9 +3,18 @@
 var Utils = require('./utils')
 var _ = require('lodash')
 
+function First(symbol, productions) {
+  this.symbol = symbol
+  this.productions = productions || []
+}
+
+First.prototype.toString = function() {
+  return this.symbol || 'ε'
+}
+
 function getFirstSet(grammar, symbol, history) {
   if (Utils.isTerminal(symbol)) {
-    return [symbol]
+    return [new First(symbol)]
   }
 
   history = history ? history.concat(symbol) : [symbol]
@@ -15,7 +24,7 @@ function getFirstSet(grammar, symbol, history) {
 
     // condição especial pra sentença vazia
     if (e === '') {
-      return ['']
+      return [new First('', [e])]
     }
 
     for (var i = 0; i < e.length; i++) {
@@ -30,22 +39,36 @@ function getFirstSet(grammar, symbol, history) {
 
       // filtra sentença vazia se não estamos na última posição
       if (i + 1 < e.length) {
-        firsts.push(_.filter(first, s => s !== ''))
+        firsts.push(_.filter(first, s => s.symbol !== ''))
       } else {
         firsts.push(first)
       }
 
       // testa próximo símbolo apenas se conjunto first
       // possui sentença vazia
-      if (!_.includes(first, '')) {
+      if (!_.includes(_.map(first, 'symbol'), '')) {
         break
       }
     }
 
-    return _.flatten(firsts)
+    return _.flatten(firsts).map(first => {
+      first.productions = [e]
+      return first
+    })
   })
 
-  return _(firsts).flatten().uniq().value()
+  firsts = _(firsts).flatten().value()
+
+  return mergeDuplicates(firsts)
+}
+
+function mergeDuplicates(list) {
+  var firstsBySymbol = _.groupBy(list, 'symbol')
+
+  return _.map(firstsBySymbol, (firsts, symbol) => {
+    var productions = _(firsts).map(f => f.productions).flatten().uniq().value()
+    return new First(symbol, productions)
+  })
 }
 
 function getFirstSets(grammar) {

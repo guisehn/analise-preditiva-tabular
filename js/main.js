@@ -110,7 +110,7 @@ function showParsingTable(grammar) {
   _.forEach(parsingTable, (items, leftSide) => {
     var tr = $('<tr></tr>').appendTo(table.find('tbody'))
 
-    $('<td></td>').text(leftSide).appendTo(tr)
+    $('<th></th>').text(leftSide).appendTo(tr)
 
     _.forEach(terminals, terminal => {
       $('<td></td>').text(items[terminal].join(', ')).appendTo(tr)
@@ -130,9 +130,10 @@ function showObject(grammar) {
 
 function showFirstSetTable(grammar) {
   var firstSet = FirstSetFinder.getFirstSets(grammar)
-  firstSet = Utils.emptyToEpsilon(firstSet)
-
   var table = mountTable(firstSet, 'Símbolo', 'First')
+
+  console.log(firstSet)
+
   $('#first-set-table').html(table)
 }
 
