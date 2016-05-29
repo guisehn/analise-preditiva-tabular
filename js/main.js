@@ -92,9 +92,7 @@ function mountTable(object, leftTitle, rightTitle) {
   return table
 }
 
-function showParsingTable(grammar) {
-  var parsingTable = ParsingTableFinder.getParsingTable(grammar)
-
+function showParsingTable(grammar, parsingTable) {
   var table = $('<table class="table table-bordered monospace"></table>')
     .html('\
       <thead><tr><th></th></tr></thead>\
@@ -126,16 +124,12 @@ function showGrammarRepresentation(grammar) {
   $('#representation').text(grammar.getRepresentation())
 }
 
-function showFirstSetTable(grammar) {
-  var firstSet = FirstSetFinder.getFirstSets(grammar)
+function showFirstSetTable(firstSet) {
   var table = mountTable(firstSet, 'Símbolo', 'First')
-
   $('#first-set-table').html(table)
 }
 
-function showFollowSetTable(grammar) {
-  var followSet = FollowSetFinder.getFollowSets(grammar)
-
+function showFollowSetTable(followSet) {
   followSet = Utils.emptyToEpsilon(followSet)
 
   var table = mountTable(followSet, 'Símbolo', 'Follow')
@@ -148,10 +142,22 @@ function process(grammar) {
   }
 
   try {
+    var firstSet = FirstSetFinder.getFirstSets(grammar)
+    var followSet = FollowSetFinder.getFollowSets(grammar)
+    var parsingTable = ParsingTableFinder.getParsingTable(grammar)
+
     showGrammarRepresentation(grammar)
-    showFirstSetTable(grammar)
-    showFollowSetTable(grammar)
-    showParsingTable(grammar)
+    showFirstSetTable(firstSet)
+    showFollowSetTable(followSet)
+    showParsingTable(grammar, parsingTable)
+
+    if (ParsingTableFinder.checkMultipleEntries(parsingTable)) {
+      $('#multiple-entries-error').show()
+      $('#entry-test-container').hide()
+    } else {
+      $('#multiple-entries-error').hide()
+      $('#entry-test-container').show()
+    }
 
     $('#result').hide().fadeIn('fast')
   } catch (e) {

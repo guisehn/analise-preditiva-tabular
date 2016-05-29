@@ -74,7 +74,11 @@ B:f|
         </div>
       </div>
 
-      <div class="row">
+      <div id="multiple-entries-error" class="alert alert-danger" role="alert">
+        Foram detectados casos de múltiplas entradas na tabela de análise preditiva, portanto a gramática especificada não é LL(1).
+      </div>
+
+      <div class="row" id="entry-test-container">
         <div class="col-md-12">
           <h4>Testar entrada</h4>
           <div id="parsing-table">TO-DO</div>

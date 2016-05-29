@@ -32,6 +32,11 @@ function getParsingTable(grammar) {
     (rightSide, leftSide) => getParsingRow(grammar, firstSets, followSets, leftSide))
 }
 
+function checkMultipleEntries(parsingTable) {
+  return _.some(parsingTable, x => _.some(x, y => y.length > 1))
+}
+
 module.exports = {
-  getParsingTable: getParsingTable
+  getParsingTable: getParsingTable,
+  checkMultipleEntries: checkMultipleEntries
 }
