@@ -78,10 +78,21 @@ B:f|
         Foram detectados casos de múltiplas entradas na tabela de análise preditiva, portanto a gramática especificada não é LL(1).
       </div>
 
-      <div class="row" id="entry-test-container">
+      <div class="row" id="sentence-recognizer-container">
         <div class="col-md-12">
           <h4>Testar entrada</h4>
-          <div id="parsing-table">TO-DO</div>
+
+          <form id="sentence-recognizer-form">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Digite a sentença a ser reconhecida…">
+
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Reconhecer!</button>
+              </span>
+            </div>
+          </form>
+
+          <div id="sentence-recognizer-table"></div>
         </div>
       </div>
     </div>

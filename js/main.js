@@ -153,10 +153,10 @@ function process(grammar) {
 
     if (ParsingTableFinder.checkMultipleEntries(parsingTable)) {
       $('#multiple-entries-error').show()
-      $('#entry-test-container').hide()
+      $('#sentence-recognizer-container').hide()
     } else {
       $('#multiple-entries-error').hide()
-      $('#entry-test-container').show()
+      $('#sentence-recognizer-container').show()
     }
 
     $('#result').hide().fadeIn('fast')
