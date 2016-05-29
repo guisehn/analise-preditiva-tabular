@@ -126,10 +126,6 @@ function showGrammarRepresentation(grammar) {
   $('#representation').text(grammar.getRepresentation())
 }
 
-function showObject(grammar) {
-  $('#object').html($('<pre></pre>').text(JSON.stringify(grammar, null, 2)))
-}
-
 function showFirstSetTable(grammar) {
   var firstSet = FirstSetFinder.getFirstSets(grammar)
   var table = mountTable(firstSet, 'Símbolo', 'First')
@@ -156,7 +152,6 @@ function process(grammar) {
     showFirstSetTable(grammar)
     showFollowSetTable(grammar)
     showParsingTable(grammar)
-    showObject(grammar)
 
     $('#result').hide().fadeIn('fast')
   } catch (e) {
