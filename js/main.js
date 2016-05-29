@@ -113,7 +113,9 @@ function showParsingTable(grammar) {
     $('<th></th>').text(leftSide).appendTo(tr)
 
     _.forEach(terminals, terminal => {
-      $('<td></td>').text(items[terminal].join(', ')).appendTo(tr)
+      $('<td></td>').text(
+        Utils.emptyToEpsilon(items[terminal]).map(p => leftSide + ' → ' + p).join(', ')
+      ).appendTo(tr)
     })
   })
 
@@ -131,8 +133,6 @@ function showObject(grammar) {
 function showFirstSetTable(grammar) {
   var firstSet = FirstSetFinder.getFirstSets(grammar)
   var table = mountTable(firstSet, 'Símbolo', 'First')
-
-  console.log(firstSet)
 
   $('#first-set-table').html(table)
 }

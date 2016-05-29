@@ -27,7 +27,7 @@ Grammar.prototype.getRepresentation = function() {
   var nonTerminals = this.getNonTerminals().join(', ')
   var terminals = this.getTerminals().join(', ')
   var productionSet = _.map(Utils.emptyToEpsilon(this.productionSet),
-    (right, left) => '  ' + left + ' -> ' + right.join(' | ')).join('\n')
+    (right, left) => '  ' + left + ' → ' + right.join(' | ')).join('\n')
 
   var str = 'G = ({' + nonTerminals + '}, {' + terminals + '}, P, ' + this.startSymbol + ')'
   str += '\nP = {\n' + productionSet + '\n}'

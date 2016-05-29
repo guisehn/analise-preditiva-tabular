@@ -1,5 +1,7 @@
 'use strict'
 
+var _ = require('lodash')
+
 function isNonTerminal(symbol) {
   return /^[A-Z]$/.test(symbol)
 }
@@ -17,7 +19,13 @@ function containsTerminal(symbols) {
 }
 
 function emptyToEpsilon(object) {
-  return _.mapValues(object, e => e.map(e => e === '' ? 'ε' : e))
+  if (_.isArray(object)) {
+    return object.map(e => emptyToEpsilon(e))
+  } else if (_.isObject(object)) {
+    return _.mapValues(object, e => emptyToEpsilon(e))
+  } else {
+    return object === '' ? 'ε' : object
+  }
 }
 
 module.exports = {
