@@ -100,9 +100,10 @@ function showParsingTable(grammar, parsingTable) {
     ')
 
   var terminals = _.keys(parsingTable[grammar.getNonTerminals()[0]])
+  var width = Math.ceil(100 / terminals.length)
 
   _.forEach(terminals, terminal => {
-    $('<th></th>').text(terminal).appendTo(table.find('thead tr'))
+    $('<th></th>').css('width', width + '%').text(terminal).appendTo(table.find('thead tr'))
   })
 
   _.forEach(parsingTable, (items, leftSide) => {
