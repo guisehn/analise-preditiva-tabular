@@ -71,6 +71,18 @@ var tests = [
       B: ['a', 'g', 'h', '$'],
       C: ['b', 'g', 'h', '$']
     }
+  },
+
+  {
+    grammar: new Grammar('S', {
+      S: ['AaAbAc'],
+      A: ['x']
+    }),
+
+    follows: {
+      S: ['$'],
+      A: ['a', 'b', 'c']
+    }
   }
 ]
 
