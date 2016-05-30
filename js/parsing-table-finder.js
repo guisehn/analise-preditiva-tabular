@@ -14,8 +14,8 @@ function getParsingRow(grammar, firstSets, followSets, symbol) {
     row[t] = _.get(first, 'productions', [])
   })
 
-  // se contém sentença vazia no first, cria items do follow
-  if (_.find(firstSets[symbol], f => f.symbol === '')) {
+  // se contém sentença vazia no conjunto de produções, cria items do follow
+  if (_.includes(grammar.productionSet[symbol], '')) {
     followSets[symbol].forEach(s => {
       row[s] = row[s].concat('')
     })
