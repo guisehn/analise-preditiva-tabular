@@ -56,12 +56,14 @@ function getFollowSet(grammar, symbol, history) {
 }
 
 function getSymbolPositions(stringProduction, symbol){
-  var indexes = [];
-  for(var i=0; i<stringProduction.length;i++) {
-      if (stringProduction[i] === symbol) {
-        indexes.push(i);
-      }
+  var indexes = []
+
+  for (var i = 0; i < stringProduction.length; i++) {
+    if (stringProduction[i] === symbol) {
+      indexes.push(i)
+    }
   }
+
   return indexes
 }
 
