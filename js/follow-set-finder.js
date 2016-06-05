@@ -15,6 +15,17 @@ function getFollowSet(grammar, symbol, history) {
   if (symbol === grammar.startSymbol) {
     followSet.push('$')
   }
+  
+  var indexes = [];
+
+  function getSymbolPositions(stringProduction, symbol){
+    for(var i=0; i<stringProduction.length;i++) {
+        if (stringProduction[i] === symbol) {
+          indexes.push(i);
+        }
+    }
+    return [indexes]
+  }
 
   _.forEach(grammar.productionSet, (rightSide, leftSide) => {
     _.forEach(rightSide, production => {
@@ -23,10 +34,10 @@ function getFollowSet(grammar, symbol, history) {
       if (symbolIndex === -1) {
         return
       }
-
+      
       for (var i = symbolIndex; i < production.length; i++) {
         var next = production[i + 1]
-
+        
         // se é final da produção, inclui follow do lado esquerdo
         if (next === undefined) {
           // checagem para evitar recursão infinita
