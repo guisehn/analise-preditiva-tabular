@@ -16,17 +16,6 @@ function getFollowSet(grammar, symbol, history) {
     followSet.push('$')
   }
   
-  var indexes = [];
-
-  function getSymbolPositions(stringProduction, symbol){
-    for(var i=0; i<stringProduction.length;i++) {
-        if (stringProduction[i] === symbol) {
-          indexes.push(i);
-        }
-    }
-    return [indexes]
-  }
-
   _.forEach(grammar.productionSet, (rightSide, leftSide) => {
     _.forEach(rightSide, production => {
       var symbolIndex = production.indexOf(symbol)
@@ -62,6 +51,16 @@ function getFollowSet(grammar, symbol, history) {
   })
 
   return _.uniq(followSet)
+}
+
+function getSymbolPositions(stringProduction, symbol){
+  var indexes = [];
+  for(var i=0; i<stringProduction.length;i++) {
+      if (stringProduction[i] === symbol) {
+        indexes.push(i);
+      }
+  }
+  return [indexes]
 }
 
 function getFollowSets(grammar) {
