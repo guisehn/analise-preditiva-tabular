@@ -20,7 +20,10 @@ function getRecognation(input, grammar, parsingTable) {
   		output[output.length] = '';
   	}else{
   		var aux = parsingTable[stack[stack.length-1]]
-  		if(!input[0] in aux || aux[input[0]].length == 0){
+  		if(!input[0] in aux){
+  			break;
+  		}
+  		if(aux[input[0]].length == 0){
   			break;
   		}
   		aux = aux[input[0]][0].split("")
