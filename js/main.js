@@ -47,7 +47,7 @@ $('#grammar-form').submit(e => {
 })
 
 $('#sentence-recognizer-form').submit(e => {
-  recognition()
+  recognize()
   e.preventDefault()
 })
 
@@ -145,8 +145,7 @@ function showFollowSetTable(followSet) {
   $('#follow-set-table').html(table)
 }
 
-function showRecognitionTable(recognitionSet){
-  
+function showRecognitionTable(recognitionSet) {
   var table = $('<table class="table table-bordered"></table>')
     .html('\
       <thead>\
@@ -171,8 +170,7 @@ function showRecognitionTable(recognitionSet){
     table.find('tbody').append(tr)
   })
 
-  $('#sentence-recognizer-table').html(table)
-
+  $('#sentence-recognizer-table').html(table).show()
 }
 
 function process(grammar) {
@@ -184,14 +182,11 @@ function process(grammar) {
     var firstSet = FirstSetFinder.getFirstSets(grammar)
     var followSet = FollowSetFinder.getFollowSets(grammar)
     var parsingTable = ParsingTableFinder.getParsingTable(grammar)
-    window.parsingTable = parsingTable
-    window.grammar = grammar
 
     showGrammarRepresentation(grammar)
     showFirstSetTable(firstSet)
     showFollowSetTable(followSet)
     showParsingTable(grammar, parsingTable)
-
 
     if (ParsingTableFinder.checkMultipleEntries(parsingTable)) {
       $('#multiple-entries-error').show()
@@ -201,15 +196,29 @@ function process(grammar) {
       $('#sentence-recognizer-container').show()
     }
 
+    window.parsingTable = parsingTable
+    window.grammar = grammar
+
     $('#result').hide().fadeIn('fast')
+
+    $('#sentence-recognizer-table').hide()
+    $('#sentence-input').val('')
   } catch (e) {
     console.log(e)
     alert('Ocorreu um erro. Veja o console para mais detalhes.')
   }
 }
 
-function recognition(){
+function recognize() {
   var input = $('#sentence-input').val()
-  var recognitionSet = RecognitionFinder.getRecognation(input, window.grammar, window.parsingTable)
-  showRecognitionTable(recognitionSet)
+
+  try {
+    var recognitionSet = RecognitionFinder.getRecognation(input, window.grammar
+      , window.parsingTable)
+
+    showRecognitionTable(recognitionSet)
+  } catch (e) {
+    console.log(e)
+    alert('Ocorreu um erro. Veja o console para mais detalhes.')
+  }
 }
