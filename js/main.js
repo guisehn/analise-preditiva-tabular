@@ -6,7 +6,10 @@ var GrammarParser = require('./grammar-parser')
 var FirstSetFinder = require('./first-set-finder')
 var FollowSetFinder = require('./follow-set-finder')
 var ParsingTableFinder = require('./parsing-table-finder')
+var RecognitionFinder = require('./recognition-finder')
 var $ = require('jquery')
+var parsingTable
+var grammar
 
 $('#use-example').click(e => {
   $('#grammar-input').val($('#example').text().trim())
@@ -40,6 +43,11 @@ $('#grammar-form').submit(e => {
     process(grammar)
   }
 
+  e.preventDefault()
+})
+
+$('#sentence-recognizer-form').submit(e => {
+  recognition()
   e.preventDefault()
 })
 
@@ -137,6 +145,36 @@ function showFollowSetTable(followSet) {
   $('#follow-set-table').html(table)
 }
 
+function showRecognitionTable(recognitionSet){
+  
+  var table = $('<table class="table table-bordered"></table>')
+    .html('\
+      <thead>\
+        <tr>\
+          <th></th>\
+          <th></th>\
+          <th></th>\
+        </tr>\
+      </thead>\
+      <tbody class="monospace"></tbody>\
+    ')
+
+  table.find('th:eq(0)').text("Pilha")
+  table.find('th:eq(1)').text("Entrada")
+  table.find('th:eq(2)').text("Saída")
+
+  _.forEach(recognitionSet, line => {
+    var tr = $('<tr></tr>')
+    $('<td></td>').appendTo(tr).text(line.s)
+    $('<td></td>').appendTo(tr).text(line.i)
+    $('<td></td>').appendTo(tr).text(line.o)
+    table.find('tbody').append(tr)
+  })
+
+  $('#sentence-recognizer-table').html(table)
+
+}
+
 function process(grammar) {
   if (!validate(grammar)) {
     return
@@ -146,11 +184,14 @@ function process(grammar) {
     var firstSet = FirstSetFinder.getFirstSets(grammar)
     var followSet = FollowSetFinder.getFollowSets(grammar)
     var parsingTable = ParsingTableFinder.getParsingTable(grammar)
+    window.parsingTable = parsingTable
+    window.grammar = grammar
 
     showGrammarRepresentation(grammar)
     showFirstSetTable(firstSet)
     showFollowSetTable(followSet)
     showParsingTable(grammar, parsingTable)
+
 
     if (ParsingTableFinder.checkMultipleEntries(parsingTable)) {
       $('#multiple-entries-error').show()
@@ -165,4 +206,10 @@ function process(grammar) {
     console.log(e)
     alert('Ocorreu um erro. Veja o console para mais detalhes.')
   }
+}
+
+function recognition(){
+  var input = $('#sentence-input').val()
+  var recognitionSet = RecognitionFinder.getRecognation(input, window.grammar, window.parsingTable)
+  showRecognitionTable(recognitionSet)
 }
