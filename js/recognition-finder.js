@@ -29,7 +29,7 @@ function getRecognation(input, grammar, parsingTable) {
 
   		stack.pop()
   		stack = stack.concat(aux.reverse())
-  		output[output.length] = aux2+' → '+aux.reverse().join('');
+  		output[output.length] = aux2+' → '+Utils.emptyToEpsilon(aux.reverse().join(''));
   	}
   	if(!(stack.length == 0 && input.length == 0)){
 		ret[ret.length] = {s:stack.join(""), i:input.join(""), o:output[output.length-1]}
