@@ -6,7 +6,7 @@ var GrammarParser = require('./grammar-parser')
 var FirstSetFinder = require('./first-set-finder')
 var FollowSetFinder = require('./follow-set-finder')
 var ParsingTableFinder = require('./parsing-table-finder')
-var RecognitionFinder = require('./recognition-finder')
+var SentenceRecognizer = require('./sentence-recognizer')
 var $ = require('jquery')
 var parsingTable
 var grammar
@@ -145,7 +145,7 @@ function showFollowSetTable(followSet) {
   $('#follow-set-table').html(table)
 }
 
-function showRecognitionTable(recognitionSet) {
+function showSentenceRecognition(recognition) {
   var table = $('<table class="table table-bordered"></table>')
     .html('\
       <thead>\
@@ -162,7 +162,7 @@ function showRecognitionTable(recognitionSet) {
   table.find('th:eq(1)').text("Entrada")
   table.find('th:eq(2)').text("Saída")
 
-  _.forEach(recognitionSet, line => {
+  _.forEach(recognition.table, line => {
     var tr = $('<tr></tr>')
     $('<td></td>').appendTo(tr).text(line.s)
     $('<td></td>').appendTo(tr).text(line.i)
@@ -170,7 +170,11 @@ function showRecognitionTable(recognitionSet) {
     table.find('tbody').append(tr)
   })
 
-  $('#sentence-recognizer-table').html(table).show()
+  var message = $('<div role="alert" class="alert"></div>')
+    .addClass(recognition.success ? 'alert-success' : 'alert-danger')
+    .text(recognition.success ? 'A sentença foi reconhecida' : 'A sentença não foi reconhecida')
+
+  $('#sentence-recognizer-table').hide().html('').append(message).append(table).fadeIn('fast')
 }
 
 function process(grammar) {
@@ -213,10 +217,10 @@ function recognize() {
   var input = $('#sentence-input').val()
 
   try {
-    var recognitionSet = RecognitionFinder.getRecognation(input, window.grammar
+    var recognition = SentenceRecognizer.recognize(input, window.grammar
       , window.parsingTable)
 
-    showRecognitionTable(recognitionSet)
+    showSentenceRecognition(recognition)
   } catch (e) {
     console.log(e)
     alert('Ocorreu um erro. Veja o console para mais detalhes.')
