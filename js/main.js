@@ -6,7 +6,10 @@ var GrammarParser = require('./grammar-parser')
 var FirstSetFinder = require('./first-set-finder')
 var FollowSetFinder = require('./follow-set-finder')
 var ParsingTableFinder = require('./parsing-table-finder')
+var SentenceRecognizer = require('./sentence-recognizer')
 var $ = require('jquery')
+var parsingTable
+var grammar
 
 $('#use-example').click(e => {
   $('#grammar-input').val($('#example').text().trim())
@@ -40,6 +43,11 @@ $('#grammar-form').submit(e => {
     process(grammar)
   }
 
+  e.preventDefault()
+})
+
+$('#sentence-recognizer-form').submit(e => {
+  recognize()
   e.preventDefault()
 })
 
@@ -137,6 +145,38 @@ function showFollowSetTable(followSet) {
   $('#follow-set-table').html(table)
 }
 
+function showSentenceRecognition(recognition) {
+  var table = $('<table class="table table-bordered"></table>')
+    .html('\
+      <thead>\
+        <tr>\
+          <th></th>\
+          <th></th>\
+          <th></th>\
+        </tr>\
+      </thead>\
+      <tbody class="monospace"></tbody>\
+    ')
+
+  table.find('th:eq(0)').text("Pilha")
+  table.find('th:eq(1)').text("Entrada")
+  table.find('th:eq(2)').text("Saída")
+
+  _.forEach(recognition.table, line => {
+    var tr = $('<tr></tr>')
+    $('<td></td>').appendTo(tr).text(line.s)
+    $('<td></td>').appendTo(tr).text(line.i)
+    $('<td></td>').appendTo(tr).text(line.o)
+    table.find('tbody').append(tr)
+  })
+
+  var message = $('<div role="alert" class="alert"></div>')
+    .addClass(recognition.success ? 'alert-success' : 'alert-danger')
+    .text(recognition.success ? 'A sentença foi reconhecida' : 'A sentença não foi reconhecida')
+
+  $('#sentence-recognizer-table').hide().html('').append(message).append(table).fadeIn('fast')
+}
+
 function process(grammar) {
   if (!validate(grammar)) {
     return
@@ -160,7 +200,27 @@ function process(grammar) {
       $('#sentence-recognizer-container').show()
     }
 
+    window.parsingTable = parsingTable
+    window.grammar = grammar
+
     $('#result').hide().fadeIn('fast')
+
+    $('#sentence-recognizer-table').hide()
+    $('#sentence-input').val('')
+  } catch (e) {
+    console.log(e)
+    alert('Ocorreu um erro. Veja o console para mais detalhes.')
+  }
+}
+
+function recognize() {
+  var input = $('#sentence-input').val()
+
+  try {
+    var recognition = SentenceRecognizer.recognize(input, window.grammar
+      , window.parsingTable)
+
+    showSentenceRecognition(recognition)
   } catch (e) {
     console.log(e)
     alert('Ocorreu um erro. Veja o console para mais detalhes.')
