@@ -2,8 +2,16 @@
   "name": "analise-preditiva-tabular",
   "version": "0.0.1",
   "license": "MIT",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
   "dependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "babelify": "^7.3.0",
     "bootstrap": "^3.3.6",
+    "browserify": "^13.0.1",
     "chai": "^3.5.0",
     "jquery": "^2.2.3",
     "lodash": "^4.12.0",
