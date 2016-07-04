@@ -4,6 +4,9 @@ Trabalho de Compiladores - 2016/1 - UNISC
 
 Alunos: Eduardo Côrtes, Guilherme Sehn, Gustavo Marchesan
 
+## Versão online
+Uma versão online completa está disponível em https://guisehn.github.io/analise-preditiva-tabular/
+
 ## Instalando ambiente de desenvolvimento
 1. Instalar o [node.js](https://nodejs.org/en/)
 2. Instalar o [watchify](https://github.com/substack/watchify) com o comando `npm install -g watchify`
